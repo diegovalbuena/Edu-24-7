@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Edu 24/7</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Panel de Administración</h1>
+    <div id="login-section">
+      <input type="password" id="admin-password" placeholder="Clave de administrador" />
+      <button onclick="login()">Ingresar</button>
+      <p id="error-msg" class="error"></p>
+    </div>
+
+    <div id="admin-panel" style="display:none;">
+  <p>Bienvenido, administrador.</p>
+
+  <h3>Subir archivo</h3>
+  <form id="uploadForm">
+    <input type="file" id="fileInput" name="archivo" required />
+    <button type="submit">Subir</button>
+  </form>
+
+  <h3>Archivos disponibles</h3>
+  <ul id="fileList"></ul>
+    </div>
+
+  </div>
+
+  <script src="scripts/admin.js"></script>
+</body>
+</html>
