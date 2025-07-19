@@ -10,13 +10,13 @@ let serviceAccount;
 
 if (process.env.FIREBASE_CONFIG) {
   serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
-} else {
-  serviceAccount = require('../firebase-config.json');
-}
+} //else {
+//  serviceAccount = require('../firebase-config.json');
+//}
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'contenido-offline.appspot.com'
+  credential: admin.credential.applicationDefault(),
+  storageBucket: 'gs://contenido-offline.firebasestorage.app'
 });
 
 

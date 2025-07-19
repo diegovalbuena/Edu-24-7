@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 console.log("Iniciando backend...");
 
 const express = require('express');
