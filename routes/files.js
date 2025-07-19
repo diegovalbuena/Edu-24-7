@@ -6,12 +6,19 @@ const path = require('path');
 const router = express.Router();
 
 // Configurar Firebase
-const serviceAccount = require('../firebase-config.json');
+let serviceAccount;
+
+if (process.env.FIREBASE_CONFIG) {
+  serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
+} else {
+  serviceAccount = require('../firebase-config.json');
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'gs://contenido-offline.firebasestorage.app' 
+  storageBucket: 'contenido-offline.appspot.com'
 });
+
 
 const bucket = admin.storage().bucket();
 
