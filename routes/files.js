@@ -13,9 +13,10 @@ if (process.env.FIREBASE_CONFIG) {
 } 
 
 admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  storageBucket: 'gs://contenido-offline.firebasestorage.app'
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'contenido-offline.appspot.com'
 });
+
 
 
 const bucket = admin.storage().bucket();
