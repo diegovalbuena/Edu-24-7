@@ -102,7 +102,7 @@ button i {
   display: grid;
   grid-template-columns: repeat(2, 32px);
   grid-template-rows: repeat(2, 32px);
-  gap: 5px;
+  gap: 8px;
   justify-content: center;
   align-items: center;
 }

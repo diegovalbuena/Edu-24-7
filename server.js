@@ -18,7 +18,6 @@ app.use(express.json());
 app.post('/api/login', (req, res) => {
   const { password } = req.body;
   if (adminPasswords.includes(password)) {
-    // Si quieres podrías generar un token de sesión aquí (por ahora solo validación simple)
     return res.status(200).json({ success: true });
   }
   res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
