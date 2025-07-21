@@ -58,24 +58,33 @@ router.get('/', async (req, res) => {
     const output = [];
 
     files.forEach(file => {
-      if (file.name.endsWith('/.init')) return;
-
-      const relativePath = file.name.slice(prefix.length);
+      let relativePath = file.name.slice(prefix.length);
       if (!relativePath) return;
 
+      // Detectar carpeta
+      if (relativePath.endsWith('/.init')) {
+        // Carpeta vacía o recién creada
+        const folderName = relativePath.replace('/.init', '/');
+        if (!folders.has(folderName)) {
+          folders.add(folderName);
+          output.push({ name: prefix + folderName });
+        }
+        return;
+      }
+
       const parts = relativePath.split('/').filter(Boolean);
-      if (parts.length === 1) {
+      if (parts.length > 1) {
+        const folderName = parts[0] + '/';
+        if (!folders.has(folderName)) {
+          folders.add(folderName);
+          output.push({ name: prefix + folderName });
+        }
+      } else if (parts.length === 1) {
+        // No es carpeta, es archivo real
         output.push({
           name: file.name,
           url: `https://storage.googleapis.com/${bucket.name}/${file.name}`
         });
-      } else if (parts.length > 1) {
-        const folderName = parts[0];
-        const folderPath = prefix + folderName + '/';
-        if (!folders.has(folderPath)) {
-          folders.add(folderPath);
-          output.push({ name: folderPath });
-        }
       }
     });
 
@@ -84,6 +93,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'No se pudieron listar los archivos' });
   }
 });
+
 
 router.post('/folder', async (req, res) => {
   const folderName = req.body.name;
