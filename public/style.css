@@ -1,106 +1,34 @@
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #e9ecef;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="admin-panel container">
+    <h1>Panel de Administración</h1>
+    <p>Bienvenido, administrador.</p>
 
-.container {
-  background-color: white;
-  padding: 2rem;
-  margin-top: 3rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 1000px;
-}
+    <div class="toolbar">
+      <button onclick="createFolder()" title="Crear carpeta">
+        <i class="fas fa-folder-plus"></i>
+      </button>
+      <button onclick="deleteFolder()" title="Eliminar carpeta">
+        <i class="fas fa-folder-minus"></i>
+      </button>
+      <form id="uploadForm" class="upload-form">
+        <input type="file" id="fileInput" name="file" />
+        <button type="submit" title="Subir archivo"><i class="fas fa-upload"></i></button>
+      </form>
+    </div>
 
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #333;
-}
+    <h2>Archivos disponibles</h2>
+    <div id="fileList" class="file-grid"></div>
+  </div>
 
-h2 {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.upload-section form {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.upload-section input[type="file"] {
-  flex: 1;
-}
-
-.upload-section button {
-  background-color: #0078d7;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.upload-section button:hover {
-  background-color: #005fa3;
-}
-
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-.file-card {
-  background-color: #f7f9fb;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.file-card i {
-  font-size: 2.5rem;
-  color: #0d6efd;
-  margin-bottom: 0.5rem;
-}
-
-.file-name {
-  font-size: 0.9rem;
-  word-wrap: break-word;
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
-
-.file-actions {
-  display: flex;
-  gap: 0.6rem;
-}
-
-.file-actions button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: #0d6efd;
-}
-
-.file-actions button:hover {
-  color: #084298;
-}
-
-@media (max-width:
-
+  <script src="/admin.js"></script>
+</body>
+</html>

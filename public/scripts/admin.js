@@ -14,7 +14,6 @@ async function fetchFiles() {
     files.forEach(file => {
       const ext = file.name.split('.').pop().toLowerCase();
       let icon = 'fa-file';
-
       if (['pdf'].includes(ext)) icon = 'fa-file-pdf';
       else if (['doc', 'docx'].includes(ext)) icon = 'fa-file-word';
       else if (['xls', 'xlsx'].includes(ext)) icon = 'fa-file-excel';
@@ -30,10 +29,18 @@ async function fetchFiles() {
         <i class="fas ${icon}"></i>
         <div class="file-name">${file.name}</div>
         <div class="file-actions">
-          <a href="${file.url}" download>
-            <button title="Descargar"><i class="fas fa-download"></i></button>
+          <a href="${file.url}" download title="Descargar">
+            <button><i class="fas fa-download"></i></button>
           </a>
-          <button onclick="deleteFile('${file.name}')" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
+          <button onclick="renameItem('${file.name}')" title="Renombrar">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button onclick="moveFilePrompt('${file.name}')" title="Mover">
+            <i class="fas fa-folder-open"></i>
+          </button>
+          <button onclick="deleteFile('${file.name}')" title="Eliminar">
+            <i class="fas fa-trash-alt"></i>
+          </button>
         </div>
       `;
       fileList.appendChild(fileCard);
@@ -60,7 +67,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const fileInput = document.getElementById('fileInput');
   if (!fileInput.files.length) return alert('Selecciona un archivo');
-  
+
   const formData = new FormData();
   formData.append('file', fileInput.files[0]);
 
@@ -71,7 +78,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     });
     const result = await res.json();
     alert(result.message || 'Archivo subido');
-    fileInput.value = ''; // limpiar input
+    fileInput.value = '';
     fetchFiles();
   } catch (err) {
     alert('Error al subir archivo');
@@ -79,6 +86,80 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
   }
 });
 
+// Crear carpeta
+async function createFolder() {
+  const name = prompt("Nombre de la nueva carpeta:");
+  if (!name) return;
+  try {
+    const res = await fetch('/api/folder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    const result = await res.json();
+    alert(result.message);
+    fetchFiles();
+  } catch (err) {
+    alert("Error al crear carpeta");
+    console.error(err);
+  }
+}
+
+// Eliminar carpeta
+async function deleteFolder() {
+  const name = prompt("Nombre de la carpeta a eliminar:");
+  if (!name) return;
+  if (!confirm(`¿Eliminar la carpeta "${name}" y todo su contenido?`)) return;
+  try {
+    const res = await fetch(`/api/folder/${name}`, { method: 'DELETE' });
+    const result = await res.json();
+    alert(result.message);
+    fetchFiles();
+  } catch (err) {
+    alert("Error al eliminar carpeta");
+    console.error(err);
+  }
+}
+
+// Renombrar archivo o carpeta
+async function renameItem(oldName) {
+  const newName = prompt(`Nuevo nombre para "${oldName}":`);
+  if (!newName || newName === oldName) return;
+  try {
+    const res = await fetch('/api/rename', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldName, newName }),
+    });
+    const result = await res.json();
+    alert(result.message);
+    fetchFiles();
+  } catch (err) {
+    alert("Error al renombrar");
+    console.error(err);
+  }
+}
+
+// Mover archivo
+async function moveFilePrompt(fileName) {
+  const newFolder = prompt(`¿A qué carpeta mover "${fileName}"?`);
+  if (!newFolder) return;
+  try {
+    const res = await fetch('/api/move', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileName, newFolder }),
+    });
+    const result = await res.json();
+    alert(result.message);
+    fetchFiles();
+  } catch (err) {
+    alert("Error al mover archivo");
+    console.error(err);
+  }
+}
+
 // Cargar archivos al iniciar
 fetchFiles();
+
 
