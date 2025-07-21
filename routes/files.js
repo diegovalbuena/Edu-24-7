@@ -12,9 +12,10 @@ const serviceAccount = require('../firebase-config.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'contenido-offline.appspot.com'
+  storageBucket: 'gs://contenido-offline.firebasestorage.app'
 });
 
+//storageBucket: 'contenido-offline.appspot.com'
 
 // Obtener el bucket de almacenamiento
 const bucket = admin.storage().bucket();
