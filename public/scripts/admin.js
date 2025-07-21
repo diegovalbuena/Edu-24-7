@@ -26,7 +26,7 @@ async function fetchFiles(path = "") {
       const isFolder = file.name.endsWith('/');
       const name = file.name.replace(path, '').replace(/\/$/, '');
 
-      if (!name || name.includes('/')) return; // Oculta archivos de subniveles
+      if (!name || name.includes('/')) return;
 
       let icon = isFolder ? 'fa-folder' : 'fa-file';
       const ext = name.split('.').pop().toLowerCase();
@@ -106,7 +106,7 @@ async function createFolder() {
   const name = prompt("Nombre de la nueva carpeta:");
   if (!name) return;
   try {
-    const res = await fetch('/api/folder', {
+    const res = await fetch('/api/files/folder', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: currentPath + name })
@@ -125,7 +125,7 @@ async function deleteFolder() {
   if (!name) return;
   if (!confirm(`¿Eliminar la carpeta "${name}" y todo su contenido?`)) return;
   try {
-    const res = await fetch(`/api/folder/${encodeURIComponent(currentPath + name)}`, { method: 'DELETE' });
+    const res = await fetch(`/api/files/folder/${encodeURIComponent(currentPath + name)}`, { method: 'DELETE' });
     const result = await res.json();
     alert(result.message);
     fetchFiles(currentPath);
@@ -139,7 +139,7 @@ async function renameItem(oldName) {
   const newName = prompt(`Nuevo nombre para "${oldName}":`);
   if (!newName || newName === oldName) return;
   try {
-    const res = await fetch('/api/rename', {
+    const res = await fetch('/api/files/rename', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ oldName, newName: currentPath + newName })
@@ -157,7 +157,7 @@ async function moveFilePrompt(fileName) {
   const newFolder = prompt(`¿A qué carpeta mover "${fileName}"?`);
   if (!newFolder) return;
   try {
-    const res = await fetch('/api/move', {
+    const res = await fetch('/api/files/move', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fileName, newFolder })
