@@ -52,6 +52,7 @@ router.delete('/:filename', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const prefix = req.query.prefix || '';
+  console.log("Listando archivos para prefix:", prefix);
   try {
     const [files] = await bucket.getFiles({ prefix });
     const unique = new Set();
