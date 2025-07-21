@@ -6,28 +6,17 @@ const path = require('path');
 const router = express.Router();
 
 
-// Configurar Firebase
+// Inicializar Firebase Admin SDK con credenciales del servicio
 
-admin.initializeApp({
-  credential: admin.credential.cert(require('/etc/secrets/firebase-config.json')),
-  storageBucket: 'contenido-offline.appspot.com'
-});
-
-
-/*
-let serviceAccount;
-
-if (process.env.FIREBASE_CONFIG) {
-  serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
-} 
+const serviceAccount = require('../firebase-config.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'contenido-offline.appspot.com'
 });
-*/
 
 
+// Obtener el bucket de almacenamiento
 const bucket = admin.storage().bucket();
 
 // Configurar Multer
