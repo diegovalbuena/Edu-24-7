@@ -42,23 +42,34 @@ async function fetchFiles(path = "") {
       }
 
       fileCard.innerHTML = `
-        <i class="fas ${icon}"></i>
-        <div class="file-name">${name}</div>
+        <div onclick="${isFolder ? `navigateTo('${file.name}')` : ''}">
+          <i class="fas ${icon}"></i>
+          <div class="file-name">${name}</div>
+        </div>
         <div class="file-actions">
-          ${isFolder ? `<button onclick="navigateTo('${file.name}')"><i class='fas fa-folder-open'></i></button>` : `
+          ${!isFolder ? `
           <a href="${file.url}" download title="Descargar"><button><i class="fas fa-download"></i></button></a>
           <button onclick="renameItem('${file.name}')"><i class="fas fa-edit"></i></button>
           <button onclick="moveFilePrompt('${file.name}')"><i class="fas fa-folder-open"></i></button>
-          <button onclick="deleteFile('${file.name}')"><i class="fas fa-trash-alt"></i></button>`}
+          <button onclick="deleteFile('${file.name}')"><i class="fas fa-trash-alt"></i></button>` : ''}
         </div>
       `;
       fileList.appendChild(fileCard);
     });
 
     currentPath = path;
+    document.getElementById('backButton').style.display = currentPath ? 'block' : 'none';
   } catch (err) {
     console.error('Error cargando archivos:', err);
   }
+}
+
+function goBack() {
+  if (!currentPath) return;
+  const parts = currentPath.split('/').filter(Boolean);
+  parts.pop();
+  const newPath = parts.length ? parts.join('/') + '/' : '';
+  fetchFiles(newPath);
 }
 
 async function deleteFile(filename) {
@@ -96,7 +107,9 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     alert('Error al subir archivo');
     console.error(err);
   }
-});
+}
+
+);
 
 function navigateTo(path) {
   fetchFiles(path);

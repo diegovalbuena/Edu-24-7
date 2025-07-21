@@ -14,12 +14,8 @@
     <p>Bienvenido, administrador.</p>
 
     <div class="toolbar">
-      <button onclick="createFolder()" title="Crear carpeta">
-        <i class="fas fa-folder-plus"></i>
-      </button>
-      <button onclick="deleteFolder()" title="Eliminar carpeta">
-        <i class="fas fa-folder-minus"></i>
-      </button>
+      <button onclick="createFolder()" title="Crear carpeta"><i class="fas fa-folder-plus"></i></button>
+      <button onclick="deleteFolder()" title="Eliminar carpeta"><i class="fas fa-folder-minus"></i></button>
       <form id="uploadForm" class="upload-form">
         <input type="file" id="fileInput" name="file" />
         <button type="submit" title="Subir archivo"><i class="fas fa-upload"></i></button>
@@ -27,6 +23,7 @@
     </div>
 
     <div class="breadcrumbs" id="breadcrumbs"></div>
+    <button id="backButton" onclick="goBack()">⬅️ Volver</button>
 
     <h2>Contenido actual</h2>
     <div id="fileList" class="file-grid"></div>

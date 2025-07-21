@@ -7,7 +7,7 @@ const path = require('path');
 const router = express.Router();
 
 const serviceAccount = require('../firebase-config.json');
-// Inicializar Firebase Admin SDK
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'gs://contenido-offline.firebasestorage.app'
@@ -52,28 +52,30 @@ router.delete('/:filename', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const prefix = req.query.prefix || '';
-  console.log("Listando archivos para prefix:", prefix);
   try {
     const [files] = await bucket.getFiles({ prefix });
-    const unique = new Set();
+    const folders = new Set();
     const output = [];
 
     files.forEach(file => {
-      const relative = file.name.slice(prefix.length);
-      if (!relative) return;
+      if (file.name.endsWith('/.init')) return;
 
-      const folderMatch = relative.match(/^([^/]+)\//);
-      if (folderMatch) {
-        const folderName = prefix + folderMatch[1] + '/';
-        if (!unique.has(folderName)) {
-          unique.add(folderName);
-          output.push({ name: folderName });
-        }
-      } else {
+      const relativePath = file.name.slice(prefix.length);
+      if (!relativePath) return;
+
+      const parts = relativePath.split('/').filter(Boolean);
+      if (parts.length === 1) {
         output.push({
           name: file.name,
           url: `https://storage.googleapis.com/${bucket.name}/${file.name}`
         });
+      } else if (parts.length > 1) {
+        const folderName = parts[0];
+        const folderPath = prefix + folderName + '/';
+        if (!folders.has(folderPath)) {
+          folders.add(folderPath);
+          output.push({ name: folderPath });
+        }
       }
     });
 
@@ -98,7 +100,7 @@ router.post('/folder', async (req, res) => {
 router.delete('/folder/:name', async (req, res) => {
   const folderName = decodeURIComponent(req.params.name);
   try {
-    const [files] = await bucket.getFiles({ prefix: folderName + '/' });
+    const [files] = await bucket.getFiles({ prefix: folderName });
     await Promise.all(files.map(file => file.delete()));
     res.status(200).json({ message: 'Carpeta eliminada' });
   } catch (err) {

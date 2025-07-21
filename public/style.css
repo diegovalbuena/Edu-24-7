@@ -2,13 +2,16 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   margin: 0;
-  padding: 0;
 }
 
 .container {
+  width: 100%;
   max-width: 1000px;
-  margin: 0 auto;
   padding: 20px;
 }
 
@@ -16,11 +19,15 @@ body {
   background-color: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1, h2 {
   color: #333;
+  margin: 10px 0;
 }
 
 .toolbar {
@@ -28,6 +35,8 @@ h1, h2 {
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .upload-form {
@@ -61,18 +70,24 @@ button i {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
+  width: 100%;
 }
 
 .file-card {
   background-color: #ffffff;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   text-align: center;
+  cursor: pointer;
+}
+
+.file-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 .file-card i {
-  font-size: 32px;
+  font-size: 36px;
   margin-bottom: 8px;
   color: #007bff;
 }
@@ -108,4 +123,8 @@ button i {
 
 .breadcrumbs span:hover {
   text-decoration: underline;
+}
+
+#backButton {
+  margin-bottom: 10px;
 }
