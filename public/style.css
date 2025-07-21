@@ -1,34 +1,111 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Administración</title>
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-<body>
-  <div class="admin-panel container">
-    <h1>Panel de Administración</h1>
-    <p>Bienvenido, administrador.</p>
 
-    <div class="toolbar">
-      <button onclick="createFolder()" title="Crear carpeta">
-        <i class="fas fa-folder-plus"></i>
-      </button>
-      <button onclick="deleteFolder()" title="Eliminar carpeta">
-        <i class="fas fa-folder-minus"></i>
-      </button>
-      <form id="uploadForm" class="upload-form">
-        <input type="file" id="fileInput" name="file" />
-        <button type="submit" title="Subir archivo"><i class="fas fa-upload"></i></button>
-      </form>
-    </div>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 0;
+}
 
-    <h2>Archivos disponibles</h2>
-    <div id="fileList" class="file-grid"></div>
-  </div>
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  <script src="/admin.js"></script>
-</body>
-</html>
+.admin-panel {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  color: #333;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.upload-form {
+  display: flex;
+  align-items: center;
+}
+
+.upload-form input[type="file"] {
+  margin-right: 8px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button i {
+  font-size: 16px;
+}
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.file-card {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.file-card i {
+  font-size: 32px;
+  margin-bottom: 8px;
+  color: #007bff;
+}
+
+.file-name {
+  font-size: 14px;
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+
+.file-actions button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  margin: 0 4px;
+}
+
+.file-actions button:hover {
+  color: #0056b3;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.breadcrumbs span {
+  cursor: pointer;
+  color: #007bff;
+}
+
+.breadcrumbs span:hover {
+  text-decoration: underline;
+}

@@ -1,3 +1,4 @@
+
 const express = require('express');
 const multer = require('multer');
 const admin = require('firebase-admin');
@@ -5,7 +6,6 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const router = express.Router();
 
-// Inicializar Firebase Admin SDK con credenciales del servicio
 const serviceAccount = require('../firebase-config.json');
 
 admin.initializeApp({
@@ -14,23 +14,22 @@ admin.initializeApp({
 });
 
 const bucket = admin.storage().bucket();
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Subida de archivos
 router.post('/upload', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No se recibió archivo' });
 
-    const blob = bucket.file(req.file.originalname);
+    const uploadPath = req.body.path || '';
+    const dest = path.posix.join(uploadPath, req.file.originalname);
+
+    const blob = bucket.file(dest);
     const blobStream = blob.createWriteStream({
       metadata: {
         contentType: req.file.mimetype,
-        metadata: {
-          firebaseStorageDownloadTokens: uuidv4(),
-        },
-      },
+        metadata: { firebaseStorageDownloadTokens: uuidv4() }
+      }
     });
 
     blobStream.on('error', (err) => res.status(500).json({ error: err.message }));
@@ -41,7 +40,6 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// Eliminar archivos
 router.delete('/:filename', async (req, res) => {
   const filename = decodeURIComponent(req.params.filename);
   try {
@@ -52,21 +50,38 @@ router.delete('/:filename', async (req, res) => {
   }
 });
 
-// Listar archivos
 router.get('/', async (req, res) => {
+  const prefix = req.query.prefix || '';
   try {
-    const [files] = await bucket.getFiles();
-    const publicFiles = files.map(file => ({
-      name: file.name,
-      url: `https://storage.googleapis.com/${bucket.name}/${file.name}`
-    }));
-    res.status(200).json(publicFiles);
+    const [files] = await bucket.getFiles({ prefix });
+    const unique = new Set();
+    const output = [];
+
+    files.forEach(file => {
+      const relative = file.name.slice(prefix.length);
+      if (!relative) return;
+
+      const folderMatch = relative.match(/^([^/]+)\//);
+      if (folderMatch) {
+        const folderName = prefix + folderMatch[1] + '/';
+        if (!unique.has(folderName)) {
+          unique.add(folderName);
+          output.push({ name: folderName });
+        }
+      } else {
+        output.push({
+          name: file.name,
+          url: `https://storage.googleapis.com/${bucket.name}/${file.name}`
+        });
+      }
+    });
+
+    res.status(200).json(output);
   } catch (error) {
     res.status(500).json({ error: 'No se pudieron listar los archivos' });
   }
 });
 
-// Crear carpeta (como archivo vacío tipo folder/)
 router.post('/folder', async (req, res) => {
   const folderName = req.body.name;
   if (!folderName) return res.status(400).json({ message: 'Nombre de carpeta requerido' });
@@ -79,11 +94,10 @@ router.post('/folder', async (req, res) => {
   }
 });
 
-// Eliminar carpeta (todos los archivos con ese prefijo)
 router.delete('/folder/:name', async (req, res) => {
   const folderName = decodeURIComponent(req.params.name);
   try {
-    const [files] = await bucket.getFiles({ prefix: `${folderName}/` });
+    const [files] = await bucket.getFiles({ prefix: folderName + '/' });
     await Promise.all(files.map(file => file.delete()));
     res.status(200).json({ message: 'Carpeta eliminada' });
   } catch (err) {
@@ -91,7 +105,6 @@ router.delete('/folder/:name', async (req, res) => {
   }
 });
 
-// Renombrar archivo o carpeta
 router.post('/rename', async (req, res) => {
   const { oldName, newName } = req.body;
   if (!oldName || !newName) return res.status(400).json({ message: 'Nombres requeridos' });
@@ -105,13 +118,13 @@ router.post('/rename', async (req, res) => {
   }
 });
 
-// Mover archivo
 router.post('/move', async (req, res) => {
   const { fileName, newFolder } = req.body;
   if (!fileName || !newFolder) return res.status(400).json({ message: 'Datos faltantes' });
   try {
+    const baseName = path.basename(fileName);
+    const newFileName = path.posix.join(newFolder, baseName);
     const oldFile = bucket.file(fileName);
-    const newFileName = `${newFolder}/${path.basename(fileName)}`;
     await oldFile.copy(bucket.file(newFileName));
     await oldFile.delete();
     res.status(200).json({ message: 'Archivo movido' });
@@ -121,4 +134,3 @@ router.post('/move', async (req, res) => {
 });
 
 module.exports = router;
-
