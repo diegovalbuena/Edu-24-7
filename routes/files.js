@@ -5,7 +5,16 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const router = express.Router();
 
+
 // Configurar Firebase
+
+admin.initializeApp({
+  credential: admin.credential.cert(require('/etc/secrets/firebase-config.json')),
+  storageBucket: 'contenido-offline.appspot.com'
+});
+
+
+/*
 let serviceAccount;
 
 if (process.env.FIREBASE_CONFIG) {
@@ -16,7 +25,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'contenido-offline.appspot.com'
 });
-
+*/
 
 
 const bucket = admin.storage().bucket();
