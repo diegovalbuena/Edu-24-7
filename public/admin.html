@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +9,7 @@
 </head>
 <body>
   <div class="admin-panel container">
+    <img src="/img/edu247_logo_libro_colombia_v2.png" alt="Logo Edu 24/7" class="logo-panel" />
     <h1>Panel de Administración</h1>
     <p>Bienvenido, administrador.</p>
 
@@ -22,8 +22,10 @@
       </form>
     </div>
 
-    <div class="breadcrumbs" id="breadcrumbs"></div>
-    <button id="backButton" onclick="goBack()">⬅️ Volver</button>
+    <div class="top-bar">
+      <button id="backButton" onclick="goBack()" title="Atrás">⬅️</button>
+      <div class="breadcrumbs" id="breadcrumbs"></div>
+    </div>
 
     <h2>Contenido actual</h2>
     <div id="fileList" class="file-grid"></div>
