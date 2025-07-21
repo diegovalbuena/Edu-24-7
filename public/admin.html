@@ -7,8 +7,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Panel de Administración</h1>
+  <div class="admin-container">
+    <header>
+      <h1>Administrador - Edu 24/7</h1>
+    </header>
+
     <div id="login-section">
       <input type="password" id="admin-password" placeholder="Clave de administrador" />
       <button onclick="login()">Ingresar</button>
@@ -16,18 +19,32 @@
     </div>
 
     <div id="admin-panel" style="display:none;">
-  <p>Bienvenido, administrador.</p>
+      <div class="sidebar">
+        <h3>Carpetas</h3>
+        <ul id="folderList">
+          <li class="selected">/ (raíz)</li>
+          <!-- Aquí se listarán las carpetas -->
+        </ul>
+        <button onclick="crearCarpeta()">📁 Nueva carpeta</button>
+      </div>
 
-  <h3>Subir archivo</h3>
-  <form id="uploadForm">
-    <input type="file" id="fileInput" name="archivo" required />
-    <button type="submit">Subir</button>
-  </form>
+      <div class="main-panel">
+        <div class="actions">
+          <form id="uploadForm">
+            <label class="custom-upload">
+              📤 Subir archivo
+              <input type="file" id="fileInput" name="archivo" required />
+            </label>
+            <button type="submit">Subir</button>
+          </form>
+        </div>
 
-  <h3>Archivos disponibles</h3>
-  <ul id="fileList"></ul>
+        <h3>Archivos</h3>
+        <ul id="fileList" class="file-list">
+          <!-- Lista de archivos -->
+        </ul>
+      </div>
     </div>
-
   </div>
 
   <script src="scripts/admin.js"></script>
