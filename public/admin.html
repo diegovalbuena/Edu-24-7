@@ -2,51 +2,29 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin - Edu 24/7</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="admin-container">
-    <header>
-      <h1>Administrador - Edu 24/7</h1>
-    </header>
+  <div class="admin-panel">
+    <h1>Panel de Administración</h1>
+    <p>Bienvenido, administrador.</p>
 
-    <div id="login-section">
-      <input type="password" id="admin-password" placeholder="Clave de administrador" />
-      <button onclick="login()">Ingresar</button>
-      <p id="error-msg" class="error"></p>
+    <div class="upload-section">
+      <h2>Subir archivo</h2>
+      <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" />
+        <button type="submit"><i class="fas fa-upload"></i></button>
+      </form>
     </div>
 
-    <div id="admin-panel" style="display:none;">
-      <div class="sidebar">
-        <h3>Carpetas</h3>
-        <ul id="folderList">
-          <li class="selected">/ (raíz)</li>
-          <!-- Aquí se listarán las carpetas -->
-        </ul>
-        <button onclick="crearCarpeta()">📁 Nueva carpeta</button>
-      </div>
-
-      <div class="main-panel">
-        <div class="actions">
-          <form id="uploadForm">
-            <label class="custom-upload">
-              📤 Subir archivo
-              <input type="file" id="fileInput" name="archivo" required />
-            </label>
-            <button type="submit">Subir</button>
-          </form>
-        </div>
-
-        <h3>Archivos</h3>
-        <ul id="fileList" class="file-list">
-          <!-- Lista de archivos -->
-        </ul>
-      </div>
-    </div>
+    <h2>Archivos disponibles</h2>
+    <div id="fileList" class="file-grid"></div>
   </div>
 
-  <script src="scripts/admin.js"></script>
+  <script src="/admin.js"></script>
 </body>
 </html>
+
