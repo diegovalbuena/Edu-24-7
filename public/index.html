@@ -6,12 +6,23 @@
   <title>Edu 24/7</title>
   <link rel="stylesheet" href="style.css">
 </head>
+<div id="adminModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" id="closeModalBtn">&times;</span>
+    <h2>Acceso Administrador</h2>
+    <input type="password" id="adminPasswordInput" placeholder="Contraseña" />
+    <button id="adminSubmitBtn" class="btn-blue">Entrar</button>
+    <div id="adminLoginError" class="error-msg" style="display:none;"></div>
+  </div>
+</div>
+<script src="/scripts/loginAdmin.js"></script>
+
 <body>
   <div class="container">
     <h1>Edu 24/7</h1>
     <p>Accede a tus contenidos educativos en cualquier momento.</p>
     <button onclick="window.location.href='app-installer.zip'">Descargar App de Escritorio</button>
-    <button onclick="window.location.href='admin.html'">Ingresar como Administrador</button>
+    <button id="adminLoginBtn" class="btn-blue">Ingresar como Administrador</button>
   </div>
 </body>
 </html>
