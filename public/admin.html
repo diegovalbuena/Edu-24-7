@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel de Administración</title>
   <link rel="stylesheet" href="/style.css" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-  <div class="admin-panel">
+  <div class="admin-panel container">
     <h1>Panel de Administración</h1>
     <p>Bienvenido, administrador.</p>
 
@@ -16,7 +16,7 @@
       <h2>Subir archivo</h2>
       <form id="uploadForm">
         <input type="file" id="fileInput" name="file" />
-        <button type="submit"><i class="fas fa-upload"></i></button>
+        <button type="submit" title="Subir archivo"><i class="fas fa-upload"></i></button>
       </form>
     </div>
 
@@ -24,7 +24,78 @@
     <div id="fileList" class="file-grid"></div>
   </div>
 
-  <script src="/admin.js"></script>
+  <script>
+    async function fetchFiles() {
+      try {
+        const res = await fetch('/api/files');
+        const files = await res.json();
+
+        const fileList = document.getElementById('fileList');
+        fileList.innerHTML = '';
+
+        files.forEach(file => {
+          const ext = file.name.split('.').pop().toLowerCase();
+          let icon = 'fa-file';
+          if (['pdf'].includes(ext)) icon = 'fa-file-pdf';
+          else if (['doc', 'docx'].includes(ext)) icon = 'fa-file-word';
+          else if (['xls', 'xlsx'].includes(ext)) icon = 'fa-file-excel';
+          else if (['jpg', 'jpeg', 'png'].includes(ext)) icon = 'fa-file-image';
+          else if (['mp4', 'avi'].includes(ext)) icon = 'fa-file-video';
+          else if (['mp3', 'wav'].includes(ext)) icon = 'fa-file-audio';
+          else if (['zip', 'rar'].includes(ext)) icon = 'fa-file-archive';
+          else if (['txt'].includes(ext)) icon = 'fa-file-lines';
+
+          fileList.innerHTML += `
+            <div class="file-card">
+              <i class="fas ${icon}"></i>
+              <div class="file-name">${file.name}</div>
+              <div class="file-actions">
+                <a href="${file.url}" download><button title="Descargar"><i class="fas fa-download"></i></button></a>
+                <button onclick="deleteFile('${file.name}')" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error('Error cargando archivos:', err);
+      }
+    }
+
+    async function deleteFile(filename) {
+      if (!confirm(`¿Eliminar archivo "${filename}"?`)) return;
+      try {
+        const res = await fetch(`/api/files/${filename}`, { method: 'DELETE' });
+        const result = await res.json();
+        alert(result.message || 'Archivo eliminado');
+        fetchFiles();
+      } catch (err) {
+        alert('Error al eliminar');
+        console.error(err);
+      }
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('fileInput');
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      try {
+        const res = await fetch('/api/files/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await res.json();
+        alert(result.message || 'Archivo subido');
+        fetchFiles();
+      } catch (err) {
+        alert('Error al subir archivo');
+        console.error(err);
+      }
+    });
+
+    // Cargar archivos al iniciar
+    fetchFiles();
+  </script>
 </body>
 </html>
-

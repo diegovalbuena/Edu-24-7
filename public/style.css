@@ -1,87 +1,93 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
+  background-color: #e9ecef;
   margin: 0;
-  padding: 2rem;
+  padding: 0;
   display: flex;
   justify-content: center;
+  min-height: 100vh;
 }
 
 .container {
   background-color: white;
   padding: 2rem;
+  margin-top: 3rem;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 1rem;
+  color: #333;
 }
 
 h2 {
   margin-top: 2rem;
   margin-bottom: 1rem;
+  color: #333;
 }
 
-.file-upload {
-  text-align: center;
-  margin-bottom: 2rem;
+.upload-section form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.file-upload input[type="file"] {
-  margin: 1rem 0;
+.upload-section input[type="file"] {
+  flex: 1;
 }
 
-.file-upload button {
+.upload-section button {
   background-color: #0078d7;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-.file-upload button:hover {
+.upload-section button:hover {
   background-color: #005fa3;
 }
 
 .file-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
-  justify-content: center;
 }
 
 .file-card {
-  background-color: #fafafa;
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
+  background-color: #f7f9fb;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
   padding: 1rem;
-  width: 150px;
-  text-align: center;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .file-card i {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  color: #0d6efd;
   margin-bottom: 0.5rem;
-  color: #0078d7;
 }
 
 .file-name {
   font-size: 0.9rem;
   word-wrap: break-word;
+  text-align: center;
   margin-bottom: 0.5rem;
 }
 
 .file-actions {
   display: flex;
-  justify-content: space-around;
+  gap: 0.6rem;
 }
 
 .file-actions button {
@@ -89,15 +95,12 @@ h2 {
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #0078d7;
+  color: #0d6efd;
 }
 
 .file-actions button:hover {
-  color: #005fa3;
+  color: #084298;
 }
 
-@media (max-width: 600px) {
-  .file-card {
-    width: 100%;
-  }
-}
+@media (max-width:
+
