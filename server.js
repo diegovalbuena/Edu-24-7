@@ -12,6 +12,8 @@ console.log("Iniciando backend...");
 // Mostrar archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.json());
+
 // Rutas API
 const filesRouter = require('./routes/files');
 app.use('/api/files', filesRouter);
