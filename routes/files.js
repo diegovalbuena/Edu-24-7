@@ -10,7 +10,7 @@ const serviceAccount = require('../firebase-config.json');
 // Inicializar Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'contenido-offline.appspot.com'
+  storageBucket: 'gs://contenido-offline.firebasestorage.app'
 });
 
 const bucket = admin.storage().bucket();
