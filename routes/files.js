@@ -7,7 +7,7 @@ const path = require('path');
 const router = express.Router();
 
 const serviceAccount = require('../firebase-config.json');
-
+// Inicializar Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'contenido-offline.appspot.com'
