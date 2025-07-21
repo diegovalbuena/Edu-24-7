@@ -98,17 +98,34 @@ button i {
   word-break: break-word;
 }
 
+.file-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;       /* Espacio entre los iconos */
+  margin-top: 6px;
+}
+
 .file-actions button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  color: #007bff;
-  margin: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  border-radius: 6px;
+  background: #f4f6f8;
+  border: 1px solid #e0e0e0;
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .file-actions button:hover {
-  color: #0056b3;
+  background: #e8f0fe;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
+
 
 .breadcrumbs {
   font-size: 14px;
