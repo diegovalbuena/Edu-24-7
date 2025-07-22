@@ -1,3 +1,6 @@
+// public/scripts/loginAdmin.js
+// Controla el modal de login de administrador en la landing page
+
 document.getElementById('adminLoginBtn').onclick = function() {
   document.getElementById('adminModal').style.display = 'flex';
   document.getElementById('adminPasswordInput').value = '';
@@ -33,7 +36,9 @@ async function doLogin() {
   }
 }
 
+// Cierra el modal si se hace clic fuera de él
 window.onclick = function(event) {
   const modal = document.getElementById('adminModal');
   if (event.target === modal) modal.style.display = 'none';
 };
+

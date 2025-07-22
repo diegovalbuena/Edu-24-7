@@ -1,3 +1,5 @@
+// routes/files.js
+// API RESTful para gestión de archivos/carpetas en Firebase Storage (usado por el panel admin)
 
 const express = require('express');
 const multer = require('multer');
@@ -6,8 +8,8 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const router = express.Router();
 
+// Inicializa Firebase Admin SDK
 const serviceAccount = require('../firebase-config.json');
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'gs://contenido-offline.firebasestorage.app'
@@ -17,6 +19,7 @@ const bucket = admin.storage().bucket();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// Subir archivos
 router.post('/upload', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No se recibió archivo' });
@@ -40,6 +43,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
+// Eliminar archivo
 router.delete('/:filename', async (req, res) => {
   const filename = decodeURIComponent(req.params.filename);
   try {
@@ -50,6 +54,7 @@ router.delete('/:filename', async (req, res) => {
   }
 });
 
+// Listar archivos y carpetas
 router.get('/', async (req, res) => {
   const prefix = req.query.prefix || '';
   try {
@@ -61,9 +66,8 @@ router.get('/', async (req, res) => {
       let relativePath = file.name.slice(prefix.length);
       if (!relativePath) return;
 
-      // Detectar carpeta
+      // Carpeta vacía (detecta con .init)
       if (relativePath.endsWith('/.init')) {
-        // Carpeta vacía o recién creada
         const folderName = relativePath.replace('/.init', '/');
         if (!folders.has(folderName)) {
           folders.add(folderName);
@@ -72,6 +76,7 @@ router.get('/', async (req, res) => {
         return;
       }
 
+      // Detecta subcarpetas
       const parts = relativePath.split('/').filter(Boolean);
       if (parts.length > 1) {
         const folderName = parts[0] + '/';
@@ -80,7 +85,7 @@ router.get('/', async (req, res) => {
           output.push({ name: prefix + folderName });
         }
       } else if (parts.length === 1) {
-        // No es carpeta, es archivo real
+        // Es archivo
         output.push({
           name: file.name,
           url: `https://storage.googleapis.com/${bucket.name}/${file.name}`
@@ -94,7 +99,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-
+// Crear carpeta (agrega archivo .init vacío)
 router.post('/folder', async (req, res) => {
   const folderName = req.body.name;
   if (!folderName) return res.status(400).json({ message: 'Nombre de carpeta requerido' });
@@ -107,6 +112,7 @@ router.post('/folder', async (req, res) => {
   }
 });
 
+// Eliminar carpeta (elimina todos sus archivos)
 router.delete('/folder/:name', async (req, res) => {
   const folderName = decodeURIComponent(req.params.name);
   try {
@@ -118,6 +124,7 @@ router.delete('/folder/:name', async (req, res) => {
   }
 });
 
+// Renombrar archivo o carpeta
 router.post('/rename', async (req, res) => {
   const { oldName, newName } = req.body;
   if (!oldName || !newName) return res.status(400).json({ message: 'Nombres requeridos' });
@@ -131,6 +138,7 @@ router.post('/rename', async (req, res) => {
   }
 });
 
+// Mover archivo a otra carpeta
 router.post('/move', async (req, res) => {
   const { fileName, newFolder } = req.body;
   if (!fileName || !newFolder) return res.status(400).json({ message: 'Datos faltantes' });

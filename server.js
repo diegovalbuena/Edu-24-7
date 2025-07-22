@@ -1,20 +1,24 @@
+// server.js
+// Backend principal para Edu 24/7 Web Admin. Controla rutas API y autenticación admin.
+
 const express = require('express');
 const app = express();
 const path = require('path');
 const port = process.env.PORT || 3000;
 
-// Leer .env si existe
+// Leer variables de entorno desde .env si existe
 require('dotenv').config();
 
 console.log("Iniciando backend...");
 
-// Variables de entorno de contraseña admin (puedes poner varias, separadas por coma)
+// Configuración de contraseñas de administrador (puedes poner varias, separadas por coma en ADMIN_PASS)
 const adminPasswords = (process.env.ADMIN_PASS || 'admin123').split(',').map(x => x.trim());
 
+// Middleware: servir archivos estáticos desde /public
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-// Ruta de login
+// Endpoint de login admin
 app.post('/api/login', (req, res) => {
   const { password } = req.body;
   if (adminPasswords.includes(password)) {
@@ -23,10 +27,11 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
 });
 
-// Rutas API archivos
+// Montar rutas de archivos (API REST para archivos y carpetas)
 const filesRouter = require('./routes/files');
 app.use('/api/files', filesRouter);
 
+// Iniciar servidor web
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);
 });

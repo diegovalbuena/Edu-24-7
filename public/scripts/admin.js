@@ -1,6 +1,9 @@
+// public/scripts/admin.js
+// Controla la UI del panel admin: muestra archivos/carpetas, gestiona acciones CRUD, breadcrumbs, etc.
 
 let currentPath = "";
 
+// Consulta archivos/carpetas y actualiza el grid
 async function fetchFiles(path = "") {
   try {
     const res = await fetch('/api/files?prefix=' + encodeURIComponent(path));
@@ -11,6 +14,7 @@ async function fetchFiles(path = "") {
     fileList.innerHTML = '';
     breadcrumbs.innerHTML = '';
 
+    // Genera breadcrumbs (ruta de navegación)
     const parts = path.split('/').filter(Boolean);
     let accumulated = '';
     breadcrumbs.innerHTML = '<span onclick="navigateTo(\'\')">Raíz</span>';
@@ -26,8 +30,9 @@ async function fetchFiles(path = "") {
       const isFolder = file.name.endsWith('/');
       const name = file.name.replace(path, '').replace(/\/$/, '');
 
-      if (!name || name.includes('/')) return;
+      if (!name || name.includes('/')) return; // Evita mostrar subcarpetas dos veces
 
+      // Iconos por tipo de archivo
       let icon = isFolder ? 'fa-folder' : 'fa-file';
       const ext = name.split('.').pop().toLowerCase();
       if (!isFolder) {
@@ -41,6 +46,7 @@ async function fetchFiles(path = "") {
         else if (['txt'].includes(ext)) icon = 'fa-file-lines';
       }
 
+      // Card visual: carpetas y archivos
       fileCard.innerHTML = `
         <div onclick="${isFolder ? `navigateTo('${file.name}')` : ''}">
           <i class="fas ${icon}"></i>
@@ -72,6 +78,7 @@ function goBack() {
   fetchFiles(newPath);
 }
 
+// Eliminar archivo
 async function deleteFile(filename) {
   if (!confirm(`¿Eliminar archivo "${filename}"?`)) return;
   try {
@@ -85,6 +92,7 @@ async function deleteFile(filename) {
   }
 }
 
+// Subida de archivos (form)
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const fileInput = document.getElementById('fileInput');
@@ -107,14 +115,14 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     alert('Error al subir archivo');
     console.error(err);
   }
-}
+});
 
-);
-
+// Navegación entre carpetas
 function navigateTo(path) {
   fetchFiles(path);
 }
 
+// Crear carpeta
 async function createFolder() {
   const name = prompt("Nombre de la nueva carpeta:");
   if (!name) return;
@@ -133,6 +141,7 @@ async function createFolder() {
   }
 }
 
+// Eliminar carpeta
 async function deleteFolder() {
   const name = prompt("Nombre de la carpeta a eliminar:");
   if (!name) return;
@@ -148,6 +157,7 @@ async function deleteFolder() {
   }
 }
 
+// Renombrar archivo/carpeta
 async function renameItem(oldName) {
   const newName = prompt(`Nuevo nombre para "${oldName}":`);
   if (!newName || newName === oldName) return;
@@ -166,6 +176,7 @@ async function renameItem(oldName) {
   }
 }
 
+// Mover archivo
 async function moveFilePrompt(fileName) {
   const newFolder = prompt(`¿A qué carpeta mover "${fileName}"?`);
   if (!newFolder) return;
@@ -184,4 +195,5 @@ async function moveFilePrompt(fileName) {
   }
 }
 
+// Inicialización
 fetchFiles();
