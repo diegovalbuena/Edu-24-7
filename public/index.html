@@ -7,13 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <div class="landing-panel">
+    <img src="img/edu247_logo_libro_colombia_v2.png" alt="Logo Edu 24/7" class="logo-panel" />
     <h1>Edu 24/7</h1>
-    <p>Accede a tus contenidos educativos en cualquier momento.</p>
-    <button onclick="window.location.href='app-installer.zip'">Descargar App de Escritorio</button>
-    <button id="adminLoginBtn" class="btn-blue">Ingresar como Administrador</button>
+    <p class="sub">Acceso educativo sin límites,<br> en cualquier lugar y a cualquier hora.</p>
+    <p class="desc">
+      Descarga o explora contenido educativo de calidad, incluso con conectividad limitada.<br>
+      Plataforma para docentes, estudiantes y comunidades rurales.
+    </p>
+    <div class="button-bar">
+      <button onclick="window.location.href='app-installer.zip'" class="btn-blue">Descargar App de Escritorio</button>
+      <button id="adminLoginBtn" class="btn-blue">Ingresar como Administrador</button>
+    </div>
   </div>
-  
+
+  <!-- Modal de login admin -->
   <div id="adminModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close" id="closeModalBtn">&times;</span>
@@ -26,4 +34,3 @@
   <script src="/scripts/loginAdmin.js"></script>
 </body>
 </html>
-
